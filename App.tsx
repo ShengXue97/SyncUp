@@ -1,26 +1,30 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { Icon } from '@rneui/themed';
+import ListElement from './components/ListElement';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx sssssto start working on your app!</Text>
+    <>
       <StatusBar style="auto" />
-      <Icon
-        name='sc-telegram'
-        type='evilicon'
-        color='#517fa4'
-      />
-    </View>
+      <View style={styles.container}>
+        <ListElement />
+        <ListElement />
+        <ListElement />
+        <ListElement />
+        <ListElement />
+      </View>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
+    marginTop: 50,
   },
 });
