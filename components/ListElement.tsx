@@ -3,7 +3,7 @@ import { Image } from '@rneui/base';
 import { Divider } from '@rneui/themed';
 import React from 'react';
 
-export default function App(props) {
+export default function ListElement(props) {
     return (
         <>
             <View style={styles.container}>
