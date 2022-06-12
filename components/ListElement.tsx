@@ -1,15 +1,16 @@
 import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import { Image } from '@rneui/base';
 import { Divider } from '@rneui/themed';
+import React from 'react';
 
 const BASE_URI = 'https://source.unsplash.com/random?sig=';
 
-export default function App() {
+export default function App(props) {
     return (
         <>
             <View style={styles.container}>
                 <Image
-                    source={{ uri: BASE_URI + 1 }}
+                    source={{ uri: props.imageUri }}
                     containerStyle={styles.image}
                     PlaceholderContent={<ActivityIndicator />}
                 />
@@ -18,19 +19,19 @@ export default function App() {
                         <Text
                             style={styles.textHeader}
                         >
-                            Hiking Group
+                            {props.title}
                         </Text>
                         <Text
                             style={styles.textTime}
                         >
-                            8m ago
+                            {props.time}
                         </Text>
                     </View>
 
                     <Text
                         style={styles.textBody}
                     >
-                        You: No worries, let us know when you reach!
+                        {props.lastUser}: {props.lastMessage}
                     </Text>
                 </View>
             </View>
@@ -44,7 +45,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginVertical: 10,
+        marginVertical: 13,
     },
     image: {
         flex: 1,
