@@ -3,8 +3,6 @@ import { Image } from '@rneui/base';
 import { Divider } from '@rneui/themed';
 import React from 'react';
 
-const BASE_URI = 'https://source.unsplash.com/random?sig=';
-
 export default function App(props) {
     return (
         <>

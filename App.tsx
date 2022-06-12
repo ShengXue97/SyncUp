@@ -1,8 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import { Icon } from '@rneui/themed';
+import { SearchBar } from '@rneui/themed';
 import ListElement from './components/ListElement';
-import React from 'react';
+import React, { useState } from 'react';
 
 const groups = [
   {
@@ -39,11 +39,28 @@ const groups = [
   }
 ]
 export default function App() {
+  const [search, setSearch] = useState("");
+  const [filteredGroups, setFilteredGroups] = useState(groups);
+
+  const updateSearch = (search) => {
+    setSearch(search);
+    setFilteredGroups(groups.filter(group => group.title.toLowerCase().includes(search.toLowerCase())));
+  };
+
   return (
     <>
       <StatusBar style="auto" />
+      <View style={styles.emptyContainer} />
+      <SearchBar
+        round={true}
+        lightTheme={true}
+        placeholder="Search group name..."
+        onChangeText={updateSearch}
+        value={search}
+      />
+
       <View style={styles.container}>
-        {groups.map((group) => (
+        {filteredGroups.map((group) => (
           <ListElement
             key={group.id}
             imageUri={group.imageUri}
@@ -59,12 +76,14 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
+  emptyContainer: {
+    marginTop: 50,
+  },
   container: {
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: '#fff',
     justifyContent: 'flex-start',
-    marginTop: 50,
   },
 });
