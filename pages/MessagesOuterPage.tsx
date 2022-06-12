@@ -37,7 +37,7 @@ const groups = [
         lastMessage: 'This restaurant looks fancy',
     }
 ]
-export default function Messages() {
+export default function MessagesOuterPage(navigation) {
     const [search, setSearch] = useState("");
     const [filteredGroups, setFilteredGroups] = useState(groups);
 

@@ -1,11 +1,11 @@
 import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 
-export default function Profile() {
+export default function MessagesInnerPage() {
 
     return (
         <>
-            <Text> Profile page is under construction! </Text>
+            <Text> Messages Inner page is under construction! </Text>
         </>
     );
 }

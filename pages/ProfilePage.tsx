@@ -1,11 +1,11 @@
 import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 
-export default function Calendar() {
+export default function ProfilePage() {
 
     return (
         <>
-            <Text> Calendar page is under construction! </Text>
+            <Text> Profile page is under construction! </Text>
         </>
     );
 }

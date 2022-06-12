@@ -1,12 +1,14 @@
-import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { Image } from '@rneui/base';
 import { Divider } from '@rneui/themed';
 import React from 'react';
+import { useNavigation } from '@react-navigation/native';
 
 export default function ListElement(props) {
+    const navigation = useNavigation();
     return (
         <>
-            <View style={styles.container}>
+            <TouchableOpacity style={styles.container} onPress={() => navigation.navigate('MessagesInnerPage')}>
                 <Image
                     source={{ uri: props.imageUri }}
                     containerStyle={styles.image}
@@ -32,7 +34,7 @@ export default function ListElement(props) {
                         {props.lastUser}: {props.lastMessage}
                     </Text>
                 </View>
-            </View>
+            </TouchableOpacity>
             <Divider />
         </>
     );
