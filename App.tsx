@@ -43,7 +43,7 @@ export default class App extends React.Component {
         <NavigationContainer>
           <Tab.Navigator>
             <Tab.Screen
-              name="Calendar"
+              name="CalendarMain"
               component={CalendarPage}
               options={{
                 tabBarIcon: ({ size, color }) => (<Icon
@@ -62,7 +62,7 @@ export default class App extends React.Component {
               }}
             />
             <Tab.Screen
-              name="Messages"
+              name="MessagesMain"
               component={MessagesPage}
               options={{
                 tabBarIcon: ({ size, color }) => (<Icon
@@ -81,7 +81,7 @@ export default class App extends React.Component {
               }}
             />
             <Tab.Screen
-              name="Profile"
+              name="ProfileMain"
               component={ProfilePage}
               options={{
                 tabBarIcon: ({ size, color }) => (<Icon
