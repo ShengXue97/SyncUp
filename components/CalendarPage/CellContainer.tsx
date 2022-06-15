@@ -4,8 +4,7 @@ import React, { useState, useEffect } from 'react';
 export default function CellContainer(props) {
     const [cellTime, setCellTime] = useState(null);
     const handleClick = () =>{
-        console.log(props.cellDate);
-        console.log(cellTime);
+        console.log(props.cellDate.format("dddd, MMMM Do YYYY, HH:mm:ss"));
     }
     
     useEffect(() => {

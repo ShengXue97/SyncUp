@@ -57,7 +57,10 @@ export default function CalendarPage() {
                                             j={j}
                                             dimensions={dimensions}
                                             key={j}
-                                            cellDate={moment(currentDates.start).add(i - 1, 'days')}
+                                            cellDate={moment(currentDates.start)
+                                                        .add(i - 1, 'd')
+                                                        .subtract(12 - j, 'h')
+                                                    }
                                         />
                                     )
                                 }
