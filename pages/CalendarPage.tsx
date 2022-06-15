@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { Dimensions } from 'react-native';
 import CalendarStrip from 'react-native-calendar-strip';
 
+import CellContainer from '../components/CalendarPage/CellContainer';
+
 const window = Dimensions.get("window");
 const screen = Dimensions.get("screen");
 
@@ -36,25 +38,7 @@ export default function CalendarPage() {
                             <View key={i} style={[styles.dayContainer, { flex: i == 8 ? 0.7 : i == 0 ? 0.9 : 1 }]}>
                                 {
                                     Array(24).fill(0).map((_, j) =>
-                                        //Cell container needs to use inline style for dynamic update of width and height during rotation
-                                        <TouchableOpacity key={j} style={{
-                                            flex: 1,
-                                            borderColor: '#D3D3D3',
-                                            borderBottomWidth: i == 8 ? 0 : i == 0 ? 0 : 1,
-                                            borderLeftWidth: 1,
-                                            width: dimensions.window.width / 7.77,
-                                            height: dimensions.window.height / 15,
-                                            backgroundColor: 'white',
-                                        }}>
-                                            {i == 0 ?
-                                                //First column is special, showing the time
-                                                <Text style={{
-                                                    fontSize: 10,
-                                                    textAlign: 'center',
-                                                }}>{j < 10 ? 0 : null}{j}:00</Text>
-                                                : <Text></Text>
-                                            }
-                                        </TouchableOpacity>
+                                        <CellContainer i={i} j={j} dimensions={dimensions} key={j}/>
                                     )
                                 }
                             </View>
