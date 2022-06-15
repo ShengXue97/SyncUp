@@ -1,12 +1,25 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 export default function CellContainer(props) {
+    const [cellTime, setCellTime] = useState(null);
+    const handleClick = () =>{
+        console.log(props.cellDate);
+        console.log(cellTime);
+    }
+    
+    useEffect(() => {
+        var time = props.j + ":00";
+        if (props.j < 10) {
+            time = "0" + time;
+        }
+        setCellTime(time);
+    });
 
     return (
         //Cell container needs to use inline style for dynamic update of width and height during rotation
         //i is column count, j is row count
-        <TouchableOpacity key={props.j} style={{
+        <TouchableOpacity key={props.j} onPress={handleClick} style={{
             flex: 1,
             borderColor: '#D3D3D3',
             borderBottomWidth: props.i == 8 ? 0 : props.i == 0 ? 0 : 1,
@@ -20,7 +33,7 @@ export default function CellContainer(props) {
                 <Text style={{
                     fontSize: 10,
                     textAlign: 'center',
-                }}>{props.j < 10 ? 0 : null}{props.j}:00</Text>
+                }}>{cellTime}</Text>
                 : 
                 //Other cells
                 <Text></Text>
