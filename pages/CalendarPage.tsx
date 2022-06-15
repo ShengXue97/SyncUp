@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
 import React, { useState, useEffect, useRef } from 'react';
 import { Dimensions } from 'react-native';
+import { Icon } from "@rneui/themed";
 import CalendarStrip from 'react-native-calendar-strip';
 
 import CellContainer from '../components/CalendarPage/CellContainer';
@@ -11,6 +12,8 @@ const screen = Dimensions.get("screen");
 
 export default function CalendarPage() {
     const [dimensions, setDimensions] = useState({ window, screen });
+    //The very first start date when entering the app, do not change this value
+    const [cachedStartDate, setCachedStartDate] = useState(null);
     const [currentDates, setCurrentDates] = useState({
         start: null,
         end: null,
@@ -19,7 +22,15 @@ export default function CalendarPage() {
     const ref = useRef(null);
     
     const onWeekChanged = (start, end) => {
+        if (cachedStartDate === null){
+            setCachedStartDate(start);
+        }
         setCurrentDates({start, end})
+    }
+
+    const handleResetClick = () => {
+        console.log(cachedStartDate);
+        ref.current.updateWeekView(cachedStartDate);
     }
 
     useEffect(() => {
@@ -34,8 +45,27 @@ export default function CalendarPage() {
 
     return (
         <View style={styles.container}>
+            <View style={styles.iconContainer}>
+                <TouchableOpacity onPress={handleResetClick}>
+                    <Icon
+                        name='calendar-outline'
+                        type='ionicon'
+                        size={40}
+                    />
+                </TouchableOpacity>
+                
+                <TouchableOpacity>
+                    <Icon
+                        name='add-circle-outline'
+                        type='ionicon'
+                        size={40}
+                    />
+                </TouchableOpacity>
+                
+            </View>
+
             <CalendarStrip
-                style={{ height: 80, paddingTop: 20, paddingBottom: 10 }}
+                style={{ height: 80, paddingBottom: 10 }}
                 calendarColor={'white'}
                 calendarHeaderStyle={{ color: 'black' }}
                 dateNumberStyle={{ color: 'black' }}
@@ -74,7 +104,16 @@ export default function CalendarPage() {
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1 },
+    container: {
+        flex: 1,
+        backgroundColor: 'white',
+    },
+    iconContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginHorizontal: 20,
+        marginVertical: 10,
+    },
     weekContainer: {
         flex: 1,
         height: '100%',
