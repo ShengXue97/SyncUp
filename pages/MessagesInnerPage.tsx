@@ -20,9 +20,10 @@ export default function MessagesInnerPage() {
         ])
     }, [])
 
-    // const onSend = useCallback((messages = []) => {
+    //const onSend = useCallback((messages = []) => {
     //     setMessages(previousMessages => GiftedChat.append(previousMessages, messages))
     // }, [])
+
 
     return (
         <View>
