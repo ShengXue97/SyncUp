@@ -24,13 +24,14 @@ export default function CalendarEditPage() {
 
     const onChangeDateStart = (event, selectedDate) => {
         const currentDate = selectedDate || dateStart;
-        setDateStart(currentDate);
+        setDateStart(currentDate)
         setShowDatePickerStart(false);
     };
 
     const onChangeTimeStart = (event, selectedTime) => {
         const currentTime = selectedTime || timeStart;
-        setTimeStart(currentTime);
+        //TODO: Add timezone support
+        setTimeStart(currentTime.subtract(8, 'h'));
         setShowTimePickerStart(false);
     };
 
@@ -42,7 +43,8 @@ export default function CalendarEditPage() {
 
     const onChangeTimeEnd = (event, selectedTime) => {
         const currentTime = selectedTime || timeEnd;
-        setTimeEnd(currentTime);
+        //TODO: Add timezone support
+        setTimeEnd(currentTime.subtract(8, 'h'));
         setShowTimePickerEnd(false);
     };
 
@@ -100,34 +102,25 @@ export default function CalendarEditPage() {
                 />
             }
 
-            <TouchableOpacity onPress={() => {setShowDatePickerStart(true)}}>
-                <Text>
-                    {moment(dateStart).format('dddd, MMMM Do YYYY')}
-                </Text>
-            </TouchableOpacity>
-            
-            <TouchableOpacity onPress={() => {setShowTimePickerStart(true)}}>
-                <Text>
-                    {moment(timeStart).format('HH:mm')}
-                </Text>
-            </TouchableOpacity>
-            
-
-            <TouchableOpacity onPress={() => {setShowDatePickerEnd(true)}}>
-                <Text>
-                    {moment(dateEnd).format('dddd, MMMM Do YYYY')}
-                </Text>
-            </TouchableOpacity>
-            
-
-            <TouchableOpacity onPress={() => {setShowTimePickerEnd(true)}}>
-                <Text>
-                    {moment(timeEnd).format('HH:mm')}
-                </Text>
-            </TouchableOpacity>
-            
-
-            
+            <View style={styles.dateContainer}>
+                <View style={styles.dateTimeContainer} >
+                    <Text onPress={() => {setShowDatePickerStart(true)}}>
+                        {moment(dateStart).format('dddd, MMMM Do YYYY')}
+                    </Text>
+                    <Text onPress={() => {setShowTimePickerStart(true)}}>
+                        {moment(timeStart).format('HH:mm')}
+                    </Text>
+                </View>
+                
+                <View style={styles.dateTimeContainer} >
+                    <Text onPress={() => {setShowDatePickerEnd(true)}}>
+                        {moment(dateEnd).format('dddd, MMMM Do YYYY')}
+                    </Text>
+                    <Text onPress={() => {setShowTimePickerEnd(true)}}>
+                        {moment(timeEnd).format('HH:mm')}
+                    </Text>
+                </View>
+            </View>
 
         </View>
     )
@@ -141,4 +134,14 @@ const styles = StyleSheet.create({
         marginHorizontal: 20,
         marginVertical: 10,
     },
+    dateContainer: {
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+    },
+    dateTimeContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginHorizontal: '20%',
+        marginVertical: 20,
+    }
 });
