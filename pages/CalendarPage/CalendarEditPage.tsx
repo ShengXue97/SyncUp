@@ -17,37 +17,37 @@ export default function CalendarEditPage() {
     const [name, setname] = useState(null);
     const [location, setLocation] = useState(null);
 
-    const [dateStart, setDateStart] = useState(new Date());
-    const [timeStart, setTimeStart] = useState(new Date());
-    
-    const [dateEnd, setDateEnd] = useState(new Date());
-    const [timeEnd, setTimeEnd] = useState(new Date());
-    
-    const {calendarEvents, addEvent} = useContext(CalendarContext)
+    const [dateStart, setDateStart] = useState(moment(new Date()));
+    const [timeStart, setTimeStart] = useState(moment(new Date()));
+
+    const [dateEnd, setDateEnd] = useState(moment(new Date()));
+    const [timeEnd, setTimeEnd] = useState(moment(new Date()));
+
+    const { calendarEvents, addEvent } = useContext(CalendarContext)
 
     const navigation = useNavigation();
-    
+
     const onChangeDateStart = (selectedDate) => {
         const currentDate = selectedDate || dateStart;
-        setDateStart(currentDate)
+        setDateStart(moment(currentDate))
         setShowDatePickerStart(false);
     };
 
     const onChangeTimeStart = (selectedTime) => {
         const currentTime = selectedTime || timeStart;
-        setTimeStart(currentTime);
+        setTimeStart(moment(currentTime));
         setShowTimePickerStart(false);
     };
 
     const onChangeDateEnd = (selectedDate) => {
         const currentDate = selectedDate || dateEnd;
-        setDateEnd(currentDate);
+        setDateEnd(moment(currentDate));
         setShowDatePickerEnd(false);
     };
 
     const onChangeTimeEnd = (selectedTime) => {
         const currentTime = selectedTime || timeEnd;
-        setTimeEnd(currentTime);
+        setTimeEnd(moment(currentTime));
         setShowTimePickerEnd(false);
     };
 
@@ -103,20 +103,20 @@ export default function CalendarEditPage() {
 
                     <View style={styles.centerContainer}>
                         <Text>
-                            {moment(dateStart).format('dddd, MMMM Do YYYY')}
+                            {dateStart.format('dddd, MMMM Do YYYY')}
                         </Text>
                     </View>
-                    
+
                     <Icon
                         name='create-outline'
                         type='ionicon'
                         size={25}
-                        onPress={() => {setShowDatePickerStart(true)}}
+                        onPress={() => { setShowDatePickerStart(true) }}
                     />
 
                     <View style={styles.centerContainer}>
                         <Text>
-                            {moment(timeStart).format('HH:mm')}
+                            {timeStart.format('HH:mm')}
                         </Text>
                     </View>
 
@@ -124,10 +124,10 @@ export default function CalendarEditPage() {
                         name='create-outline'
                         type='ionicon'
                         size={25}
-                        onPress={() => {setShowTimePickerStart(true)}}
+                        onPress={() => { setShowTimePickerStart(true) }}
                     />
                 </View>
-                
+
                 <View style={styles.dateTimeContainer} >
                     <Icon
                         name='time-outline'
@@ -137,28 +137,28 @@ export default function CalendarEditPage() {
 
                     <View style={styles.centerContainer}>
                         <Text>
-                            {moment(dateEnd).format('dddd, MMMM Do YYYY')}
+                            {dateEnd.format('dddd, MMMM Do YYYY')}
                         </Text>
                     </View>
-                    
+
                     <Icon
                         name='create-outline'
                         type='ionicon'
                         size={25}
-                        onPress={() => {setShowDatePickerEnd(true)}}
+                        onPress={() => { setShowDatePickerEnd(true) }}
                     />
 
                     <View style={styles.centerContainer}>
                         <Text>
-                            {moment(timeEnd).format('HH:mm')}
+                            {timeEnd.format('HH:mm')}
                         </Text>
                     </View>
-                    
+
                     <Icon
                         name='create-outline'
                         type='ionicon'
                         size={25}
-                        onPress={() => {setShowTimePickerEnd(true)}}
+                        onPress={() => { setShowTimePickerEnd(true) }}
                     />
                 </View>
             </View>
@@ -168,7 +168,7 @@ export default function CalendarEditPage() {
                 type='ionicon'
                 size={25}
                 onPress={() => {
-                    addEvent({ name, location, dateStart, timeStart, dateEnd, timeEnd})
+                    addEvent({ name, location, dateStart, timeStart, dateEnd, timeEnd })
                     navigation.navigate('CalendarOverviewPage')
                 }}
             />

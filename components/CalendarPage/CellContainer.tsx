@@ -5,26 +5,87 @@ import moment from 'moment';
 
 export default function CellContainer(props) {
     const [cellTime, setCellTime] = useState(null);
-    const {calendarEvents, addEvent} = useContext(CalendarContext)
 
-    const handleClick = () =>{
+    const { calendarEvents, addEvent } = useContext(CalendarContext)
+
+    const handleClick = () => {
         console.log(props.cellDate.format("dddd, MMMM Do YYYY, HH:mm:ss"));
     }
 
-    const checkEvent = () => {
-        //check if the date of this cell is the same as any event in calendarEvents. Returns true or false.
-        return calendarEvents.reduce(function (accumulator, event) {
-            return accumulator || props.cellDate.isSame(
-                moment(event.dateStart).set({
-                    hour: moment(event.timeStart).get('hour'),
-                    minute: moment(event.timeStart).get('minute'),
-                    second: 0,
-                    millisecond: 0,
-                })
-            );
-          }, false);
+    const updateCellStyle = () => {
+        for (let i = 0; i < calendarEvents.length; i++) {
+            const event = calendarEvents[i];
+            const cellDateStart = props.cellDate;
+            const cellDateEnd = props.cellDate.clone().add(1, 'hours');
+
+            if (event.dateStart.get('date') !== (cellDateStart.get('date')) ||
+                event.dateEnd.get('date') !== (cellDateStart.get('date'))) {
+                continue;
+            }
+
+            const dateStartMoment = event.dateStart.set({
+                hour: event.timeStart.get('hour'),
+                minute: event.timeStart.get('minute'),
+                second: 0,
+                millisecond: 0,
+            })
+
+            const dateEndMoment = event.dateEnd.set({
+                hour: event.timeEnd.get('hour'),
+                minute: event.timeEnd.get('minute'),
+                second: 0,
+                millisecond: 0,
+            })
+
+
+            console.log("---");
+            console.log(cellDateStart.format('dddd, MMMM Do YYYY HH:mm'), dateStartMoment.format('dddd, MMMM Do YYYY HH:mm'), dateEndMoment.format('dddd, MMMM Do YYYY HH:mm'));
+
+            if (dateStartMoment.isSameOrBefore(cellDateStart)) {
+                console.log("fk", cellDateEnd.format('dddd, MMMM Do YYYY HH:mm'))
+                if (dateEndMoment.isSameOrAfter(cellDateEnd)) {
+                    console.log("fk", cellDateEnd.format('dddd, MMMM Do YYYY HH:mm'))
+                    console.log("100%")
+                    return {
+                        height: '100%',
+                        top: 0,
+                    }
+                } else if (cellDateStart.diff(dateEndMoment, 'minutes') <= 60
+                    && (dateEndMoment.diff(cellDateStart, 'minutes') / 60) >= 0) {
+                    console.log("fk", cellDateEnd.format('dddd, MMMM Do YYYY HH:mm'))
+                    console.log(String((dateEndMoment.diff(cellDateStart, 'minutes') / 60) * 100) + "%");
+
+                    return {
+                        height: String((dateEndMoment.diff(cellDateStart, 'minutes') / 60) * 100) + "%",
+                        top: 0,
+                    }
+                }
+            } else if (dateStartMoment.isSameOrBefore(cellDateEnd)) {
+                console.log("fk", cellDateEnd.format('dddd, MMMM Do YYYY HH:mm'))
+                if (dateEndMoment.isSameOrAfter(cellDateEnd)) {
+                    console.log("fk", cellDateEnd.format('dddd, MMMM Do YYYY HH:mm'))
+                    console.log(dateStartMoment.format('dddd, MMMM Do YYYY HH:mm'));
+                    console.log(cellDateEnd.diff(dateStartMoment, 'minutes'));
+                    return {
+                        height: String((cellDateEnd.diff(dateStartMoment, 'minutes') / 60) * 100) + "%",
+                        bottom: 0,
+                    }
+                } else {
+                    console.log(String((dateEndMoment.diff(dateStartMoment, 'minutes') / 60) * 100) + "%");
+                    console.log(String(100 - ((cellDateEnd.diff(dateEndMoment, 'minutes') / 60) * 100)) + "%");
+                    return {
+                        height: String((dateEndMoment.diff(dateStartMoment, 'minutes') / 60) * 100) + "%",
+                        bottom: String(100 - ((cellDateEnd.diff(dateEndMoment, 'minutes') / 60) * 100)) + "%",
+                    }
+                }
+            }
+        }
+        return {
+            height: '0%',
+            bottom: 0
+        }
     }
-    
+
     useEffect(() => {
         var time = props.j + ":00";
         if (props.j < 10) {
@@ -51,12 +112,16 @@ export default function CellContainer(props) {
                     fontSize: 10,
                     textAlign: 'center',
                 }}>{cellTime}</Text>
-                : 
+                :
                 //Other cells
                 <View
                     style={{
                         backgroundColor: 'green',
-                        height: checkEvent() ? '100%' : '0%',
+                        width: '100%',
+                        position: 'absolute',
+                        height: updateCellStyle().height,
+                        top: updateCellStyle().top && 0,
+                        bottom: updateCellStyle().bottom && 0,
                     }}
                 />
             }
