@@ -5,7 +5,7 @@ import { Icon } from "@rneui/themed";
 import CalendarStrip from 'react-native-calendar-strip';
 import { useNavigation } from '@react-navigation/native';
 
-import CellContainer from '../components/CalendarPage/CellContainer';
+import CellContainer from '../../components/CalendarPage/CellContainer';
 import moment from 'moment';
 
 const window = Dimensions.get("window");

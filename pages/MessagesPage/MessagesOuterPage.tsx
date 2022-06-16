@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { SearchBar } from '@rneui/themed';
-import ListElement from '../components/ListElement';
+import ListElement from '../../components/ListElement';
 import React, { useState } from 'react';
 
 const groups = [
@@ -37,7 +37,7 @@ const groups = [
         lastMessage: 'This restaurant looks fancy',
     }
 ]
-export default function MessagesOuterPage(navigation) {
+export default function MessagesOuterPage() {
     const [search, setSearch] = useState("");
     const [filteredGroups, setFilteredGroups] = useState(groups);
 

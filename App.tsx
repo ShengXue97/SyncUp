@@ -1,9 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, SafeAreaView } from 'react-native';
 import React from 'react';
-import MessagesPage from './pages/MessagesPage';
-import CalendarPage from './pages/CalendarPage';
-import ProfilePage from './pages/ProfilePage';
+import MessagesPage from './pages/MessagesPage/MessagesPage';
+import CalendarPage from './pages/CalendarPage/CalendarPage';
+import ProfilePage from './pages/ProfilePage/ProfilePage';
 import { Icon } from "@rneui/themed";
 import AppLoading from 'expo-app-loading';
 
