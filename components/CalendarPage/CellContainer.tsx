@@ -1,10 +1,28 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import CalendarContext from '../../pages/CalendarPage/CalendarContext';
+import moment from 'moment';
 
 export default function CellContainer(props) {
     const [cellTime, setCellTime] = useState(null);
+    const {calendarEvents, addEvent} = useContext(CalendarContext)
+
     const handleClick = () =>{
         console.log(props.cellDate.format("dddd, MMMM Do YYYY, HH:mm:ss"));
+    }
+
+    const checkEvent = () => {
+        //check if the date of this cell is the same as any event in calendarEvents. Returns true or false.
+        return calendarEvents.reduce(function (accumulator, event) {
+            return accumulator || props.cellDate.isSame(
+                moment(event.dateStart).set({
+                    hour: moment(event.timeStart).get('hour'),
+                    minute: moment(event.timeStart).get('minute'),
+                    second: 0,
+                    millisecond: 0,
+                })
+            );
+          }, false);
     }
     
     useEffect(() => {
@@ -35,7 +53,12 @@ export default function CellContainer(props) {
                 }}>{cellTime}</Text>
                 : 
                 //Other cells
-                <Text></Text>
+                <View
+                    style={{
+                        backgroundColor: 'green',
+                        height: checkEvent() ? '100%' : '0%',
+                    }}
+                />
             }
         </TouchableOpacity>
     );
