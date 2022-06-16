@@ -1,10 +1,11 @@
 import { StyleSheet, Text, View, Button } from 'react-native';
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback, useEffect, useContext } from 'react'
 import { Input, Icon } from '@rneui/themed';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import CalendarContext from './CalendarContext';
+import { useNavigation } from '@react-navigation/native';
 
 export default function CalendarEditPage() {
     const [showDatePickerStart, setShowDatePickerStart] = useState(false);
@@ -22,7 +23,10 @@ export default function CalendarEditPage() {
     const [dateEnd, setDateEnd] = useState(new Date());
     const [timeEnd, setTimeEnd] = useState(new Date());
     
+    const {calendarEvents, addEvent} = useContext(CalendarContext)
 
+    const navigation = useNavigation();
+    
     const onChangeDateStart = (selectedDate) => {
         const currentDate = selectedDate || dateStart;
         setDateStart(currentDate)
@@ -97,7 +101,7 @@ export default function CalendarEditPage() {
                         size={25}
                     />
 
-                    <View style={styles.dateTextContainer}>
+                    <View style={styles.centerContainer}>
                         <Text>
                             {moment(dateStart).format('dddd, MMMM Do YYYY')}
                         </Text>
@@ -110,7 +114,7 @@ export default function CalendarEditPage() {
                         onPress={() => {setShowDatePickerStart(true)}}
                     />
 
-                    <View style={styles.dateTextContainer}>
+                    <View style={styles.centerContainer}>
                         <Text>
                             {moment(timeStart).format('HH:mm')}
                         </Text>
@@ -131,7 +135,7 @@ export default function CalendarEditPage() {
                         size={25}
                     />
 
-                    <View style={styles.dateTextContainer}>
+                    <View style={styles.centerContainer}>
                         <Text>
                             {moment(dateEnd).format('dddd, MMMM Do YYYY')}
                         </Text>
@@ -144,7 +148,7 @@ export default function CalendarEditPage() {
                         onPress={() => {setShowDatePickerEnd(true)}}
                     />
 
-                    <View style={styles.dateTextContainer}>
+                    <View style={styles.centerContainer}>
                         <Text>
                             {moment(timeEnd).format('HH:mm')}
                         </Text>
@@ -158,6 +162,16 @@ export default function CalendarEditPage() {
                     />
                 </View>
             </View>
+
+            <Icon
+                name='save-outline'
+                type='ionicon'
+                size={25}
+                onPress={() => {
+                    addEvent({ name, location, dateStart, timeStart, dateEnd, timeEnd})
+                    navigation.navigate('CalendarOverviewPage')
+                }}
+            />
 
         </View>
     )
@@ -181,7 +195,7 @@ const styles = StyleSheet.create({
         marginHorizontal: '3%',
         marginVertical: 20,
     },
-    dateTextContainer: {
+    centerContainer: {
         display: 'flex',
         justifyContent: 'center', /* align horizontal */
         alignItems: 'center', /* align vertical */

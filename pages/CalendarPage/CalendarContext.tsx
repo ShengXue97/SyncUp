@@ -1,4 +1,8 @@
 import React from 'react'
-const ThingsContext = React.createContext({})
-export const ThingsProvider = ThingsContext.Provider
-export default ThingsContext
+
+const CalendarContext = React.createContext({
+    calendarEvents: [],
+    addEvent: (event) => {}
+})
+export const CalendarProvider = CalendarContext.Provider
+export default CalendarContext

@@ -1,9 +1,10 @@
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Dimensions } from 'react-native';
 import { Icon } from "@rneui/themed";
 import CalendarStrip from 'react-native-calendar-strip';
 import { useNavigation } from '@react-navigation/native';
+import CalendarContext from './CalendarContext';
 
 import CellContainer from '../../components/CalendarPage/CellContainer';
 import moment from 'moment';
@@ -22,7 +23,8 @@ export default function CalendarOverviewPage() {
     })
 
     const ref = useRef(null);
-    
+    const {calendarEvents, addEvent} = useContext(CalendarContext)
+
     const onWeekChanged = (start, end) => {
         if (cachedStartDate === null){
             setCachedStartDate(start);
@@ -36,6 +38,7 @@ export default function CalendarOverviewPage() {
     }
 
     useEffect(() => {
+        console.log(calendarEvents);
         const subscription = Dimensions.addEventListener(
             "change",
             ({ window, screen }) => {
