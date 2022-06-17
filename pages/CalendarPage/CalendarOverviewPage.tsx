@@ -101,6 +101,7 @@ export default function CalendarOverviewPage() {
                                 }
 
                                 {
+                                    (i === 0 || i === 8) ? null :
                                     calendarEvents.map(event => {
                                         const cellDate = moment(currentDates.start)
                                                             .add(i - 1, 'd')
@@ -126,7 +127,7 @@ export default function CalendarOverviewPage() {
                                                 }}
                                             >
                                                 <Text style={styles.eventText}>
-                                                    {event.name}
+                                                    {event.name} @ {event.location}
                                                 </Text>
 
                                             </TouchableOpacity>

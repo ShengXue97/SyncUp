@@ -214,6 +214,7 @@ export default function CalendarEditPage() {
                             second: 0,
                             millisecond: 0,
                         })
+                        
     
                         //Check if the new event overlaps with an existing event
                         var overlaps = false;
