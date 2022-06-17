@@ -1,2 +1,4 @@
 1. React Native Elements
 https://reactnativeelements.com/docs/components/icon
+
+C:\Users\VVSHENS\node-v16.15.1-win-x64\npm

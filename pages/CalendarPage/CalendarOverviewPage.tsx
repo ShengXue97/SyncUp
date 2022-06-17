@@ -99,6 +99,41 @@ export default function CalendarOverviewPage() {
                                         />
                                     )
                                 }
+
+                                {
+                                    calendarEvents.map(event => {
+                                        const cellDate = moment(currentDates.start)
+                                                            .add(i - 1, 'd')
+                                                            .subtract(12, 'h');
+                                        if (event.dateStartMoment.get('date') === (cellDate.get('date')) &&
+                                            event.dateEndMoment.get('date') === (cellDate.get('date'))) {
+                                            console.log("real")
+                                            console.log(event.dateStartMoment.format('dddd, MMMM Do YYYY HH:mm'))
+                                            console.log(event.dateEndMoment.format('dddd, MMMM Do YYYY HH:mm'))
+                                            console.log(cellDate.format('dddd, MMMM Do YYYY HH:mm'))
+                                            console.log(event.dateEndMoment.diff(event.dateStartMoment, 'minutes'))
+                                            console.log(event.dateStartMoment.diff(cellDate, 'minutes'))
+                                            return <TouchableOpacity
+                                                style={{
+                                                    backgroundColor: 'orange',
+                                                    width: '100%',
+                                                    position: 'absolute',
+                                                    height: ((event.dateEndMoment.diff(event.dateStartMoment, 'minutes')) / 60) * 
+                                                            (dimensions.window.height / 15),
+                                                    top: ((event.dateStartMoment.diff(cellDate, 'minutes')) / 60) * 
+                                                            (dimensions.window.height / 15),
+                                                    opacity: 1,
+                                                }}
+                                            >
+                                                <Text style={styles.eventText}>
+                                                    {event.name}
+                                                </Text>
+
+                                            </TouchableOpacity>
+                                        }
+                                        
+                                    })
+                                }
                             </View>
                         )
                     }
@@ -131,4 +166,8 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'flex-start',
     },
+    eventText: {
+        color: 'white',
+        textAlign: 'center',
+    }
 });

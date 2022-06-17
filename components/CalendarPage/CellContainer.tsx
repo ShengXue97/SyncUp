@@ -8,70 +8,6 @@ export default function CellContainer(props) {
 
     const { calendarEvents, addEvent } = useContext(CalendarContext)
 
-    const handleClick = () => {
-        console.log(props.cellDate.format("dddd, MMMM Do YYYY, HH:mm:ss"));
-    }
-
-    const updateCellStyle = () => {
-        for (let i = 0; i < calendarEvents.length; i++) {
-            const event = calendarEvents[i];
-            const cellDateStart = props.cellDate;
-            const cellDateEnd = props.cellDate.clone().add(1, 'hours');
-
-            if (event.dateStartMoment.get('date') !== (cellDateStart.get('date')) ||
-                event.dateEndMoment.get('date') !== (cellDateStart.get('date'))) {
-                continue;
-            }
-
-            console.log("---");
-            console.log(cellDateStart.format('dddd, MMMM Do YYYY HH:mm'), event.dateStartMoment.format('dddd, MMMM Do YYYY HH:mm'), event.dateEndMoment.format('dddd, MMMM Do YYYY HH:mm'));
-
-            if (event.dateStartMoment.isSameOrBefore(cellDateStart)) {
-                console.log("fk", cellDateEnd.format('dddd, MMMM Do YYYY HH:mm'))
-                if (event.dateEndMoment.isSameOrAfter(cellDateEnd)) {
-                    console.log("fk", cellDateEnd.format('dddd, MMMM Do YYYY HH:mm'))
-                    console.log("100%")
-                    return {
-                        height: '100%',
-                        top: 0,
-                    }
-                } else if (cellDateStart.diff(event.dateEndMoment, 'minutes') <= 60
-                    && (event.dateEndMoment.diff(cellDateStart, 'minutes') / 60) >= 0) {
-                    console.log("fk", cellDateEnd.format('dddd, MMMM Do YYYY HH:mm'))
-                    console.log(String((event.dateEndMoment.diff(cellDateStart, 'minutes') / 60) * 100) + "%");
-
-                    return {
-                        height: String((event.dateEndMoment.diff(cellDateStart, 'minutes') / 60) * 100) + "%",
-                        top: 0,
-                    }
-                }
-            } else if (event.dateStartMoment.isSameOrBefore(cellDateEnd)) {
-                console.log("fk", cellDateEnd.format('dddd, MMMM Do YYYY HH:mm'))
-                if (event.dateEndMoment.isSameOrAfter(cellDateEnd)) {
-                    console.log("fk", cellDateEnd.format('dddd, MMMM Do YYYY HH:mm'))
-                    console.log(event.dateStartMoment.format('dddd, MMMM Do YYYY HH:mm'));
-                    console.log(cellDateEnd.diff(event.dateStartMoment, 'minutes'));
-                    return {
-                        height: String((cellDateEnd.diff(event.dateStartMoment, 'minutes') / 60) * 100) + "%",
-                        bottom: 0,
-                    }
-                } else {
-                    console.log(String((event.dateEndMoment.diff(event.dateStartMoment, 'minutes') / 60) * 100) + "%");
-                    console.log(String(100 - ((cellDateEnd.diff(event.dateEndMoment, 'minutes') / 60) * 100)) + "%");
-                    const out = {
-                        height: String((event.dateEndMoment.diff(event.dateStartMoment, 'minutes') / 60) * 100) + "%",
-                        bottom: String((cellDateEnd.diff(event.dateEndMoment, 'minutes') / 60) * 100) + "%",
-                    }
-                    return out;
-                }
-            }
-        }
-        return {
-            height: '0%',
-            bottom: 0
-        }
-    }
-
     useEffect(() => {
         var time = props.j + ":00";
         if (props.j < 10) {
@@ -83,7 +19,7 @@ export default function CellContainer(props) {
     return (
         //Cell container needs to use inline style for dynamic update of width and height during rotation
         //i is column count, j is row count
-        <TouchableOpacity key={props.j} onPress={handleClick} style={{
+        <TouchableOpacity key={props.j} style={{
             flex: 1,
             borderColor: '#D3D3D3',
             borderBottomWidth: props.i == 8 ? 0 : props.i == 0 ? 0 : 1,
@@ -100,16 +36,7 @@ export default function CellContainer(props) {
                 }}>{cellTime}</Text>
                 :
                 //Other cells
-                <View
-                    style={{
-                        backgroundColor: 'green',
-                        width: '100%',
-                        position: 'absolute',
-                        height: updateCellStyle().height,
-                        top: updateCellStyle().top,
-                        bottom: updateCellStyle().bottom,
-                    }}
-                />
+                <View/>
             }
         </TouchableOpacity>
     );
