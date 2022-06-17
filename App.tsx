@@ -10,6 +10,7 @@ import AppLoading from 'expo-app-loading';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import * as Font from 'expo-font';
+import { NativeBaseProvider, Box } from "native-base";
 
 const Tab = createBottomTabNavigator();
 
@@ -38,70 +39,72 @@ export default class App extends React.Component {
     }
 
     return (
-      <SafeAreaView style={styles.container}>
-        <StatusBar style="auto" />
-        <NavigationContainer>
-          <Tab.Navigator>
-            <Tab.Screen
-              name="CalendarMain"
-              component={CalendarPage}
-              options={{
-                tabBarIcon: ({ size, color }) => (<Icon
-                  name='calendar-outline'
-                  type='ionicon'
-                  size={size}
-                  color={color}
-                />),
-                headerStyle: {
-                  backgroundColor: '#5DB075',
-                },
-                headerTintColor: '#fff',
-                headerTitleStyle: {
-                  fontWeight: 'bold',
-                },
-              }}
-            />
-            <Tab.Screen
-              name="MessagesMain"
-              component={MessagesPage}
-              options={{
-                tabBarIcon: ({ size, color }) => (<Icon
-                  name='mail-outline'
-                  type='ionicon'
-                  size={size}
-                  color={color}
-                />),
-                headerStyle: {
-                  backgroundColor: '#5DB075',
-                },
-                headerTintColor: '#fff',
-                headerTitleStyle: {
-                  fontWeight: 'bold',
-                },
-              }}
-            />
-            <Tab.Screen
-              name="ProfileMain"
-              component={ProfilePage}
-              options={{
-                tabBarIcon: ({ size, color }) => (<Icon
-                  name='person-circle-outline'
-                  type='ionicon'
-                  size={size}
-                  color={color}
-                />),
-                headerStyle: {
-                  backgroundColor: '#5DB075',
-                },
-                headerTintColor: '#fff',
-                headerTitleStyle: {
-                  fontWeight: 'bold',
-                },
-              }}
-            />
-          </Tab.Navigator>
-        </NavigationContainer>
-      </SafeAreaView>
+      <NativeBaseProvider>
+        <SafeAreaView style={styles.container}>
+          <StatusBar style="auto" />
+          <NavigationContainer>
+            <Tab.Navigator>
+              <Tab.Screen
+                name="CalendarMain"
+                component={CalendarPage}
+                options={{
+                  tabBarIcon: ({ size, color }) => (<Icon
+                    name='calendar-outline'
+                    type='ionicon'
+                    size={size}
+                    color={color}
+                  />),
+                  headerStyle: {
+                    backgroundColor: '#5DB075',
+                  },
+                  headerTintColor: '#fff',
+                  headerTitleStyle: {
+                    fontWeight: 'bold',
+                  },
+                }}
+              />
+              <Tab.Screen
+                name="MessagesMain"
+                component={MessagesPage}
+                options={{
+                  tabBarIcon: ({ size, color }) => (<Icon
+                    name='mail-outline'
+                    type='ionicon'
+                    size={size}
+                    color={color}
+                  />),
+                  headerStyle: {
+                    backgroundColor: '#5DB075',
+                  },
+                  headerTintColor: '#fff',
+                  headerTitleStyle: {
+                    fontWeight: 'bold',
+                  },
+                }}
+              />
+              <Tab.Screen
+                name="ProfileMain"
+                component={ProfilePage}
+                options={{
+                  tabBarIcon: ({ size, color }) => (<Icon
+                    name='person-circle-outline'
+                    type='ionicon'
+                    size={size}
+                    color={color}
+                  />),
+                  headerStyle: {
+                    backgroundColor: '#5DB075',
+                  },
+                  headerTintColor: '#fff',
+                  headerTitleStyle: {
+                    fontWeight: 'bold',
+                  },
+                }}
+              />
+            </Tab.Navigator>
+          </NavigationContainer>
+        </SafeAreaView>
+      </NativeBaseProvider>
     );
   }
 

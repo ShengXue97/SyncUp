@@ -18,64 +18,49 @@ export default function CellContainer(props) {
             const cellDateStart = props.cellDate;
             const cellDateEnd = props.cellDate.clone().add(1, 'hours');
 
-            if (event.dateStart.get('date') !== (cellDateStart.get('date')) ||
-                event.dateEnd.get('date') !== (cellDateStart.get('date'))) {
+            if (event.dateStartMoment.get('date') !== (cellDateStart.get('date')) ||
+                event.dateEndMoment.get('date') !== (cellDateStart.get('date'))) {
                 continue;
             }
 
-            const dateStartMoment = event.dateStart.set({
-                hour: event.timeStart.get('hour'),
-                minute: event.timeStart.get('minute'),
-                second: 0,
-                millisecond: 0,
-            })
-
-            const dateEndMoment = event.dateEnd.set({
-                hour: event.timeEnd.get('hour'),
-                minute: event.timeEnd.get('minute'),
-                second: 0,
-                millisecond: 0,
-            })
-
-
             console.log("---");
-            console.log(cellDateStart.format('dddd, MMMM Do YYYY HH:mm'), dateStartMoment.format('dddd, MMMM Do YYYY HH:mm'), dateEndMoment.format('dddd, MMMM Do YYYY HH:mm'));
+            console.log(cellDateStart.format('dddd, MMMM Do YYYY HH:mm'), event.dateStartMoment.format('dddd, MMMM Do YYYY HH:mm'), event.dateEndMoment.format('dddd, MMMM Do YYYY HH:mm'));
 
-            if (dateStartMoment.isSameOrBefore(cellDateStart)) {
+            if (event.dateStartMoment.isSameOrBefore(cellDateStart)) {
                 console.log("fk", cellDateEnd.format('dddd, MMMM Do YYYY HH:mm'))
-                if (dateEndMoment.isSameOrAfter(cellDateEnd)) {
+                if (event.dateEndMoment.isSameOrAfter(cellDateEnd)) {
                     console.log("fk", cellDateEnd.format('dddd, MMMM Do YYYY HH:mm'))
                     console.log("100%")
                     return {
                         height: '100%',
                         top: 0,
                     }
-                } else if (cellDateStart.diff(dateEndMoment, 'minutes') <= 60
-                    && (dateEndMoment.diff(cellDateStart, 'minutes') / 60) >= 0) {
+                } else if (cellDateStart.diff(event.dateEndMoment, 'minutes') <= 60
+                    && (event.dateEndMoment.diff(cellDateStart, 'minutes') / 60) >= 0) {
                     console.log("fk", cellDateEnd.format('dddd, MMMM Do YYYY HH:mm'))
-                    console.log(String((dateEndMoment.diff(cellDateStart, 'minutes') / 60) * 100) + "%");
+                    console.log(String((event.dateEndMoment.diff(cellDateStart, 'minutes') / 60) * 100) + "%");
 
                     return {
-                        height: String((dateEndMoment.diff(cellDateStart, 'minutes') / 60) * 100) + "%",
+                        height: String((event.dateEndMoment.diff(cellDateStart, 'minutes') / 60) * 100) + "%",
                         top: 0,
                     }
                 }
-            } else if (dateStartMoment.isSameOrBefore(cellDateEnd)) {
+            } else if (event.dateStartMoment.isSameOrBefore(cellDateEnd)) {
                 console.log("fk", cellDateEnd.format('dddd, MMMM Do YYYY HH:mm'))
-                if (dateEndMoment.isSameOrAfter(cellDateEnd)) {
+                if (event.dateEndMoment.isSameOrAfter(cellDateEnd)) {
                     console.log("fk", cellDateEnd.format('dddd, MMMM Do YYYY HH:mm'))
-                    console.log(dateStartMoment.format('dddd, MMMM Do YYYY HH:mm'));
-                    console.log(cellDateEnd.diff(dateStartMoment, 'minutes'));
+                    console.log(event.dateStartMoment.format('dddd, MMMM Do YYYY HH:mm'));
+                    console.log(cellDateEnd.diff(event.dateStartMoment, 'minutes'));
                     return {
-                        height: String((cellDateEnd.diff(dateStartMoment, 'minutes') / 60) * 100) + "%",
+                        height: String((cellDateEnd.diff(event.dateStartMoment, 'minutes') / 60) * 100) + "%",
                         bottom: 0,
                     }
                 } else {
-                    console.log(String((dateEndMoment.diff(dateStartMoment, 'minutes') / 60) * 100) + "%");
-                    console.log(String(100 - ((cellDateEnd.diff(dateEndMoment, 'minutes') / 60) * 100)) + "%");
+                    console.log(String((event.dateEndMoment.diff(event.dateStartMoment, 'minutes') / 60) * 100) + "%");
+                    console.log(String(100 - ((cellDateEnd.diff(event.dateEndMoment, 'minutes') / 60) * 100)) + "%");
                     const out = {
-                        height: String((dateEndMoment.diff(dateStartMoment, 'minutes') / 60) * 100) + "%",
-                        bottom: String((cellDateEnd.diff(dateEndMoment, 'minutes') / 60) * 100) + "%",
+                        height: String((event.dateEndMoment.diff(event.dateStartMoment, 'minutes') / 60) * 100) + "%",
+                        bottom: String((cellDateEnd.diff(event.dateEndMoment, 'minutes') / 60) * 100) + "%",
                     }
                     return out;
                 }
