@@ -73,10 +73,11 @@ export default function CellContainer(props) {
                 } else {
                     console.log(String((dateEndMoment.diff(dateStartMoment, 'minutes') / 60) * 100) + "%");
                     console.log(String(100 - ((cellDateEnd.diff(dateEndMoment, 'minutes') / 60) * 100)) + "%");
-                    return {
+                    const out = {
                         height: String((dateEndMoment.diff(dateStartMoment, 'minutes') / 60) * 100) + "%",
-                        bottom: String(100 - ((cellDateEnd.diff(dateEndMoment, 'minutes') / 60) * 100)) + "%",
+                        bottom: String((cellDateEnd.diff(dateEndMoment, 'minutes') / 60) * 100) + "%",
                     }
+                    return out;
                 }
             }
         }
@@ -120,8 +121,8 @@ export default function CellContainer(props) {
                         width: '100%',
                         position: 'absolute',
                         height: updateCellStyle().height,
-                        top: updateCellStyle().top && 0,
-                        bottom: updateCellStyle().bottom && 0,
+                        top: updateCellStyle().top,
+                        bottom: updateCellStyle().bottom,
                     }}
                 />
             }
