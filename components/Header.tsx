@@ -8,11 +8,11 @@ export default function Header(props) {
         <>
             <HeaderRNE
                 backgroundColor="#5DB075"
-                // leftComponent={{
-                //     icon: 'arrow-back-outline',
-                //     color: '#fff',
-                //     type: 'ionicon',
-                // }}
+                leftComponent={{
+                    icon: 'arrow-back-outline',
+                    color: '#fff',
+                    type: 'ionicon',
+                }}
                 centerComponent={{ text: props.title, style: styles.heading }}
             />
         </>

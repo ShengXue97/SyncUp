@@ -2,17 +2,20 @@ import { StyleSheet, View, Text } from 'react-native';
 import React, { useState, useCallback, useEffect, useContext } from 'react'
 import { Input, Icon } from '@rneui/themed';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import CalendarContext from './CalendarContext';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Button, useToast, Center, Box } from "native-base";
 import * as Moment from 'moment';
 import moment from 'moment';
 import { extendMoment } from 'moment-range';
+import uniqid from 'uniqid';
+import AppContext from '../AppContext';
+import App from '../../App';
 
 const extendedMoment = extendMoment(Moment);
 
-export default function CalendarEditPage() {
+export default function CalendarEditPage(props) {
     const [showDatePickerStart, setShowDatePickerStart] = useState(false);
     const [showTimePickerStart, setShowTimePickerStart] = useState(false);
 
@@ -25,17 +28,26 @@ export default function CalendarEditPage() {
     const [show, setShow] = React.useState(true);
 
     const { calendarEvents, addEvent } = useContext(CalendarContext)
+    const { pageTitle, changePageTitle } = useContext(AppContext)
 
-    const navigation = useNavigation();
     const route = useRoute();
     const toast = useToast();
-    const cellDate = route.params === undefined ? moment(new Date()) : route.params.cellDate;
 
-    const [dateStart, setDateStart] = useState(cellDate.clone());
-    const [timeStart, setTimeStart] = useState(cellDate.clone());
+    const dateStartMoment = route.params === undefined ? moment(new Date()) :
+        route.params.status === 'add_blank' ? moment(new Date()) :
+            route.params.status === 'add_selected' ? route.params.cellDate :
+                route.params.status === 'edit' ? route.params.dateStartMoment :
+                    moment(new Date());
 
-    const [dateEnd, setDateEnd] = useState(cellDate.clone());
-    const [timeEnd, setTimeEnd] = useState(cellDate.clone());
+    const dateEndMoment = route.params === undefined ? moment(new Date()) :
+        route.params.status === 'edit' ? route.params.dateEndMoment :
+            dateStartMoment;
+
+    const [dateStart, setDateStart] = useState(dateStartMoment.clone());
+    const [timeStart, setTimeStart] = useState(dateStartMoment.clone());
+
+    const [dateEnd, setDateEnd] = useState(dateEndMoment.clone());
+    const [timeEnd, setTimeEnd] = useState(dateEndMoment.clone());
 
     const onChangeDateStart = (selectedDate) => {
         const currentDate = selectedDate || dateStart;
@@ -74,175 +86,178 @@ export default function CalendarEditPage() {
     }
 
     return (
-        <View style={styles.container}>
-            <Input
-                placeholder="Event name"
-                leftIcon={{ type: 'ionicon', name: 'calendar-outline' }}
-                onChangeText={value => setname(value)}
-            />
+        <ScrollView>
+            <View style={styles.container} >
+                <Input
+                    placeholder="Event name"
+                    leftIcon={{ type: 'ionicon', name: 'calendar-outline' }}
+                    onChangeText={value => setname(value)}
+                />
 
-            <Input
-                placeholder="Location"
-                leftIcon={{ type: 'ionicon', name: 'location-outline' }}
-                onChangeText={value => setLocation(value)}
-            />
+                <Input
+                    placeholder="Location"
+                    leftIcon={{ type: 'ionicon', name: 'location-outline' }}
+                    onChangeText={value => setLocation(value)}
+                />
 
-            <DateTimePickerModal
-                isVisible={showDatePickerStart}
-                mode="date"
-                onConfirm={onChangeDateStart}
-                onCancel={onChangeDateStart}
-            />
+                <DateTimePickerModal
+                    isVisible={showDatePickerStart}
+                    mode="date"
+                    onConfirm={onChangeDateStart}
+                    onCancel={onChangeDateStart}
+                />
 
-            <DateTimePickerModal
-                isVisible={showTimePickerStart}
-                mode="time"
-                onConfirm={onChangeTimeStart}
-                onCancel={onChangeTimeStart}
-            />
+                <DateTimePickerModal
+                    isVisible={showTimePickerStart}
+                    mode="time"
+                    onConfirm={onChangeTimeStart}
+                    onCancel={onChangeTimeStart}
+                />
 
-            <DateTimePickerModal
-                isVisible={showDatePickerEnd}
-                mode="date"
-                onConfirm={onChangeDateEnd}
-                onCancel={onChangeDateEnd}
-            />
+                <DateTimePickerModal
+                    isVisible={showDatePickerEnd}
+                    mode="date"
+                    onConfirm={onChangeDateEnd}
+                    onCancel={onChangeDateEnd}
+                />
 
-            <DateTimePickerModal
-                isVisible={showTimePickerEnd}
-                mode="time"
-                onConfirm={onChangeTimeEnd}
-                onCancel={onChangeTimeEnd}
-            />
+                <DateTimePickerModal
+                    isVisible={showTimePickerEnd}
+                    mode="time"
+                    onConfirm={onChangeTimeEnd}
+                    onCancel={onChangeTimeEnd}
+                />
 
-            <View style={styles.dateContainer}>
-                <View style={styles.dateTimeContainer} >
-                    <Icon
-                        name='time-outline'
-                        type='ionicon'
-                        size={25}
-                    />
+                <View style={styles.dateContainer}>
+                    <View style={styles.dateTimeContainer} >
+                        <Icon
+                            name='time-outline'
+                            type='ionicon'
+                            size={25}
+                        />
 
-                    <View style={styles.centerContainer}>
-                        <Text>
-                            {dateStart.format('dddd, MMMM Do YYYY')}
-                        </Text>
+                        <View style={styles.centerContainer}>
+                            <Text>
+                                {dateStart.format('dddd, MMMM Do YYYY')}
+                            </Text>
+                        </View>
+
+                        <Icon
+                            name='create-outline'
+                            type='ionicon'
+                            size={25}
+                            onPress={() => { setShowDatePickerStart(true) }}
+                        />
+
+                        <View style={styles.centerContainer}>
+                            <Text>
+                                {timeStart.format('HH:mm')}
+                            </Text>
+                        </View>
+
+                        <Icon
+                            name='create-outline'
+                            type='ionicon'
+                            size={25}
+                            onPress={() => { setShowTimePickerStart(true) }}
+                        />
                     </View>
 
-                    <Icon
-                        name='create-outline'
-                        type='ionicon'
-                        size={25}
-                        onPress={() => { setShowDatePickerStart(true) }}
-                    />
+                    <View style={styles.dateTimeContainer} >
+                        <Icon
+                            name='time-outline'
+                            type='ionicon'
+                            size={25}
+                        />
 
-                    <View style={styles.centerContainer}>
-                        <Text>
-                            {timeStart.format('HH:mm')}
-                        </Text>
+                        <View style={styles.centerContainer}>
+                            <Text>
+                                {dateEnd.format('dddd, MMMM Do YYYY')}
+                            </Text>
+                        </View>
+
+                        <Icon
+                            name='create-outline'
+                            type='ionicon'
+                            size={25}
+                            onPress={() => { setShowDatePickerEnd(true) }}
+                        />
+
+                        <View style={styles.centerContainer}>
+                            <Text>
+                                {timeEnd.format('HH:mm')}
+                            </Text>
+                        </View>
+
+                        <Icon
+                            name='create-outline'
+                            type='ionicon'
+                            size={25}
+                            onPress={() => { setShowTimePickerEnd(true) }}
+                        />
                     </View>
-
-                    <Icon
-                        name='create-outline'
-                        type='ionicon'
-                        size={25}
-                        onPress={() => { setShowTimePickerStart(true) }}
-                    />
                 </View>
 
-                <View style={styles.dateTimeContainer} >
-                    <Icon
-                        name='time-outline'
-                        type='ionicon'
-                        size={25}
-                    />
+                <Icon
+                    name='save-outline'
+                    type='ionicon'
+                    size={25}
+                    onPress={() => {
+                        //check if dateStart is same as dateEnd
+                        if (dateStart.format('dddd, MMMM Do YYYY') !== dateEnd.format('dddd, MMMM Do YYYY')) {
+                            callToast("Error! Event not added. Start Date must be the same as End Date!")
+                        }
+                        else if (name === null || name === "") {
+                            callToast("Error! Event not added. Event name cannot be empty!")
+                        }
+                        else if (location === null || location === "") {
+                            callToast("Error! Event not added. Location cannot be empty!")
+                        }
+                        else if (timeEnd.isSameOrBefore(timeStart)) {
+                            callToast("Error! Event not added. Start time must be before End Time!")
+                        } else {
+                            const dateStartMoment = dateStart.set({
+                                hour: timeStart.get('hour'),
+                                minute: timeStart.get('minute'),
+                                second: 0,
+                                millisecond: 0,
+                            })
 
-                    <View style={styles.centerContainer}>
-                        <Text>
-                            {dateEnd.format('dddd, MMMM Do YYYY')}
-                        </Text>
-                    </View>
-
-                    <Icon
-                        name='create-outline'
-                        type='ionicon'
-                        size={25}
-                        onPress={() => { setShowDatePickerEnd(true) }}
-                    />
-
-                    <View style={styles.centerContainer}>
-                        <Text>
-                            {timeEnd.format('HH:mm')}
-                        </Text>
-                    </View>
-
-                    <Icon
-                        name='create-outline'
-                        type='ionicon'
-                        size={25}
-                        onPress={() => { setShowTimePickerEnd(true) }}
-                    />
-                </View>
-            </View>
-
-            <Icon
-                name='save-outline'
-                type='ionicon'
-                size={25}
-                onPress={() => {
-                    //check if dateStart is same as dateEnd
-                    if (dateStart.format('dddd, MMMM Do YYYY') !== dateEnd.format('dddd, MMMM Do YYYY')) {
-                        callToast("Error! Event not added. Start Date must be the same as End Date!")
-                    }
-                    else if (name === null || name === "") {
-                        callToast("Error! Event not added. Event name cannot be empty!")
-                    }
-                    else if (location === null || location === "") {
-                        callToast("Error! Event not added. Location cannot be empty!")
-                    }
-                    else if (timeEnd.isSameOrBefore(timeStart)) {
-                        callToast("Error! Event not added. Start time must be before End Time!")
-                    } else {
-                        const dateStartMoment = dateStart.set({
-                            hour: timeStart.get('hour'),
-                            minute: timeStart.get('minute'),
-                            second: 0,
-                            millisecond: 0,
-                        })
-
-                        const dateEndMoment = dateEnd.set({
-                            hour: timeEnd.get('hour'),
-                            minute: timeEnd.get('minute'),
-                            second: 0,
-                            millisecond: 0,
-                        })
+                            const dateEndMoment = dateEnd.set({
+                                hour: timeEnd.get('hour'),
+                                minute: timeEnd.get('minute'),
+                                second: 0,
+                                millisecond: 0,
+                            })
 
 
-                        //Check if the new event overlaps with an existing event
-                        var overlaps = false;
-                        for (let i = 0; i < calendarEvents.length; i++) {
-                            const event = calendarEvents[i];
-                            const range1 = extendedMoment.range(dateStartMoment, dateEndMoment);
-                            const range2 = extendedMoment.range(event.dateEndMoment, event.dateEndMoment);
-                            if (range1.overlaps(range2)) {
-                                overlaps = true;
-                                console.log("ok")
-                                callToast("Error! Event not added. This event overlaps with an existing event!")
-                                break;
+                            //Check if the new event overlaps with an existing event
+                            var overlaps = false;
+                            for (let i = 0; i < calendarEvents.length; i++) {
+                                const event = calendarEvents[i];
+                                const range1 = extendedMoment.range(dateStartMoment, dateEndMoment);
+                                const range2 = extendedMoment.range(event.dateEndMoment, event.dateEndMoment);
+                                if (range1.overlaps(range2)) {
+                                    overlaps = true;
+                                    console.log("ok")
+                                    callToast("Error! Event not added. This event overlaps with an existing event!")
+                                    break;
+                                }
+                            }
+
+                            if (!overlaps) {
+                                changePageTitle('Calendar');
+                                addEvent({ id: uniqid(), name, location, dateStartMoment, dateEndMoment })
+                                props.navigation.navigate('CalendarOverviewPage')
                             }
                         }
 
-                        if (!overlaps) {
-                            addEvent({ name, location, dateStartMoment, dateEndMoment })
-                            navigation.navigate('CalendarOverviewPage')
-                        }
-                    }
 
+                    }}
+                />
 
-                }}
-            />
-
-        </View>
+            </View>
+        </ScrollView >
     )
 }
 

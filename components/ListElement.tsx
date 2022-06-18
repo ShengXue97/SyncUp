@@ -1,14 +1,17 @@
 import { StyleSheet, Text, View, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { Image } from '@rneui/base';
 import { Divider } from '@rneui/themed';
-import React from 'react';
+import React, { useContext } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import AppContext from '../pages/AppContext';
 
 export default function ListElement(props) {
     const navigation = useNavigation();
+    const { pageTitle, changePageTitle } = useContext(AppContext)
+
     return (
         <>
-            <TouchableOpacity style={styles.container} onPress={() => navigation.navigate('MessagesInnerPage')}>
+            <TouchableOpacity style={styles.container} onPress={() => { changePageTitle('Group Messages'); navigation.navigate('MessagesInnerPage'); }}>
                 <Image
                     source={{ uri: props.imageUri }}
                     containerStyle={styles.image}

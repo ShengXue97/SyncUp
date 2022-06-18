@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import CalendarEditPage from './CalendarEditPage';
 import CalendarOverviewPage from './CalendarOverviewPage';
@@ -14,7 +14,7 @@ export default function CalendarPage() {
     }
 
     return (
-        <CalendarProvider value={{calendarEvents, addEvent}}>
+        <CalendarProvider value={{ calendarEvents, addEvent }}>
             <Stack.Navigator>
                 <Stack.Screen
                     name="CalendarOverviewPage"

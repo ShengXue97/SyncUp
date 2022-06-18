@@ -3,6 +3,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import CalendarContext from '../../pages/CalendarPage/CalendarContext';
 import moment from 'moment';
 import { useNavigation } from '@react-navigation/native';
+import AppContext from '../../pages/AppContext';
 
 export default function CellContainer(props) {
     const [cellTime, setCellTime] = useState(null);
@@ -10,10 +11,14 @@ export default function CellContainer(props) {
     const { calendarEvents, addEvent } = useContext(CalendarContext)
 
     const navigation = useNavigation();
+    const { pageTitle, changePageTitle } = useContext(AppContext)
 
     const handlePress = () => {
         console.log(props.cellDate.format('YYYY-MM-DD HH:mm:ss'));
+        changePageTitle('Add Event');
+
         navigation.navigate('CalendarEditPage', {
+            status: 'add_selected',
             cellDate: props.cellDate,
         })
     }
