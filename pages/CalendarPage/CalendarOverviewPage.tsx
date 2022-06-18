@@ -27,7 +27,7 @@ export default function CalendarOverviewPage() {
     const [selectedEvent, setSelectedEvent] = useState(null);
 
     const ref = useRef(null);
-    const { calendarEvents, addEvent } = useContext(CalendarContext)
+    const { calendarEvents, addEvent, removeEvent } = useContext(CalendarContext)
     const { pageTitle, changePageTitle } = useContext(AppContext)
 
     const onWeekChanged = (start, end) => {
@@ -88,6 +88,7 @@ export default function CalendarOverviewPage() {
                         </Button>
                         <Button style={styles.button} onPress={() => {
                             setShowModal(false);
+                            removeEvent(selectedEvent.id);
                         }}>
                             Delete event
                         </Button>

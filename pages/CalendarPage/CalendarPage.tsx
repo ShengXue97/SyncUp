@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import CalendarEditPage from './CalendarEditPage';
 import CalendarOverviewPage from './CalendarOverviewPage';
 import { CalendarProvider } from './CalendarContext';
+import AppContext from '../AppContext';
 
 const Stack = createNativeStackNavigator();
 
@@ -12,9 +13,13 @@ export default function CalendarPage() {
     const addEvent = (event) => {
         setCalendarEvents([...calendarEvents, event]);
     }
+    const removeEvent = (id) => {
+        console.log("Deleting event: " + id);
+        setCalendarEvents(calendarEvents.filter(e => e.id !== id));
+    }
 
     return (
-        <CalendarProvider value={{ calendarEvents, addEvent }}>
+        <CalendarProvider value={{ calendarEvents, addEvent, removeEvent }}>
             <Stack.Navigator>
                 <Stack.Screen
                     name="CalendarOverviewPage"

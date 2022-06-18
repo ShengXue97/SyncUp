@@ -8,7 +8,7 @@ import AppContext from '../../pages/AppContext';
 export default function CellContainer(props) {
     const [cellTime, setCellTime] = useState(null);
 
-    const { calendarEvents, addEvent } = useContext(CalendarContext)
+    const { calendarEvents, addEvent, removeEvent } = useContext(CalendarContext)
 
     const navigation = useNavigation();
     const { pageTitle, changePageTitle } = useContext(AppContext)
