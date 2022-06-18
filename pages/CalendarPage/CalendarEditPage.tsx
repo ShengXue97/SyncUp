@@ -1,10 +1,10 @@
 import { StyleSheet, View, Text } from 'react-native';
-import React, { useState, useCallback, useEffect, useContext} from 'react'
+import React, { useState, useCallback, useEffect, useContext } from 'react'
 import { Input, Icon } from '@rneui/themed';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import CalendarContext from './CalendarContext';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { Button, useToast, Center, Box } from "native-base";
 import * as Moment from 'moment';
 import moment from 'moment';
@@ -22,18 +22,20 @@ export default function CalendarEditPage() {
     const [name, setname] = useState(null);
     const [location, setLocation] = useState(null);
 
-    const [dateStart, setDateStart] = useState(moment(new Date()));
-    const [timeStart, setTimeStart] = useState(moment(new Date()));
-
-    const [dateEnd, setDateEnd] = useState(moment(new Date()));
-    const [timeEnd, setTimeEnd] = useState(moment(new Date()));
-
     const [show, setShow] = React.useState(true);
-    
+
     const { calendarEvents, addEvent } = useContext(CalendarContext)
 
     const navigation = useNavigation();
+    const route = useRoute();
     const toast = useToast();
+    const cellDate = route.params === undefined ? moment(new Date()) : route.params.cellDate;
+
+    const [dateStart, setDateStart] = useState(cellDate.clone());
+    const [timeStart, setTimeStart] = useState(cellDate.clone());
+
+    const [dateEnd, setDateEnd] = useState(cellDate.clone());
+    const [timeEnd, setTimeEnd] = useState(cellDate.clone());
 
     const onChangeDateStart = (selectedDate) => {
         const currentDate = selectedDate || dateStart;
@@ -62,11 +64,11 @@ export default function CalendarEditPage() {
     const callToast = (toastMessage) => {
         toast.show({
             render: () => {
-            return <Box bg="red.400" px="2" py="1" rounded="sm" mb={5}>
-                        <Text style={styles.toastText}>
-                            {toastMessage}
-                        </Text>
-                    </Box>;
+                return <Box bg="red.400" px="2" py="1" rounded="sm" mb={5}>
+                    <Text style={styles.toastText}>
+                        {toastMessage}
+                    </Text>
+                </Box>;
             }
         });
     }
@@ -189,9 +191,9 @@ export default function CalendarEditPage() {
                 size={25}
                 onPress={() => {
                     //check if dateStart is same as dateEnd
-                    if (dateStart.format('dddd, MMMM Do YYYY') !== dateEnd.format('dddd, MMMM Do YYYY')){
+                    if (dateStart.format('dddd, MMMM Do YYYY') !== dateEnd.format('dddd, MMMM Do YYYY')) {
                         callToast("Error! Event not added. Start Date must be the same as End Date!")
-                    } 
+                    }
                     else if (name === null || name === "") {
                         callToast("Error! Event not added. Event name cannot be empty!")
                     }
@@ -207,36 +209,36 @@ export default function CalendarEditPage() {
                             second: 0,
                             millisecond: 0,
                         })
-            
+
                         const dateEndMoment = dateEnd.set({
                             hour: timeEnd.get('hour'),
                             minute: timeEnd.get('minute'),
                             second: 0,
                             millisecond: 0,
                         })
-                        
-    
+
+
                         //Check if the new event overlaps with an existing event
                         var overlaps = false;
                         for (let i = 0; i < calendarEvents.length; i++) {
                             const event = calendarEvents[i];
                             const range1 = extendedMoment.range(dateStartMoment, dateEndMoment);
                             const range2 = extendedMoment.range(event.dateEndMoment, event.dateEndMoment);
-                            if (range1.overlaps(range2)){
+                            if (range1.overlaps(range2)) {
                                 overlaps = true;
                                 console.log("ok")
                                 callToast("Error! Event not added. This event overlaps with an existing event!")
                                 break;
                             }
                         }
-                        
-                        if (!overlaps){
+
+                        if (!overlaps) {
                             addEvent({ name, location, dateStartMoment, dateEndMoment })
                             navigation.navigate('CalendarOverviewPage')
                         }
                     }
-                    
-                    
+
+
                 }}
             />
 

@@ -2,11 +2,21 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import React, { useState, useEffect, useContext } from 'react';
 import CalendarContext from '../../pages/CalendarPage/CalendarContext';
 import moment from 'moment';
+import { useNavigation } from '@react-navigation/native';
 
 export default function CellContainer(props) {
     const [cellTime, setCellTime] = useState(null);
 
     const { calendarEvents, addEvent } = useContext(CalendarContext)
+
+    const navigation = useNavigation();
+
+    const handlePress = () => {
+        console.log(props.cellDate.format('YYYY-MM-DD HH:mm:ss'));
+        navigation.navigate('CalendarEditPage', {
+            cellDate: props.cellDate,
+        })
+    }
 
     useEffect(() => {
         var time = props.j + ":00";
@@ -19,7 +29,7 @@ export default function CellContainer(props) {
     return (
         //Cell container needs to use inline style for dynamic update of width and height during rotation
         //i is column count, j is row count
-        <TouchableOpacity key={props.j} style={{
+        <TouchableOpacity key={props.j} onPress={handlePress} style={{
             flex: 1,
             borderColor: '#D3D3D3',
             borderBottomWidth: props.i == 8 ? 0 : props.i == 0 ? 0 : 1,
@@ -36,7 +46,7 @@ export default function CellContainer(props) {
                 }}>{cellTime}</Text>
                 :
                 //Other cells
-                <View/>
+                <View />
             }
         </TouchableOpacity>
     );

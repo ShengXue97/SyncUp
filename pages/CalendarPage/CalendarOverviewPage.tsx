@@ -23,13 +23,13 @@ export default function CalendarOverviewPage() {
     })
 
     const ref = useRef(null);
-    const {calendarEvents, addEvent} = useContext(CalendarContext)
+    const { calendarEvents, addEvent } = useContext(CalendarContext)
 
     const onWeekChanged = (start, end) => {
-        if (cachedStartDate === null){
+        if (cachedStartDate === null) {
             setCachedStartDate(start);
         }
-        setCurrentDates({start, end})
+        setCurrentDates({ start, end })
     }
 
     const handleResetClick = () => {
@@ -58,7 +58,7 @@ export default function CalendarOverviewPage() {
                         size={40}
                     />
                 </TouchableOpacity>
-                
+
                 <TouchableOpacity onPress={() => navigation.navigate('CalendarEditPage')}>
                     <Icon
                         name='add-circle-outline'
@@ -66,7 +66,7 @@ export default function CalendarOverviewPage() {
                         size={40}
                     />
                 </TouchableOpacity>
-                
+
             </View>
 
             <CalendarStrip
@@ -93,47 +93,47 @@ export default function CalendarOverviewPage() {
                                             dimensions={dimensions}
                                             key={j}
                                             cellDate={moment(currentDates.start)
-                                                        .add(i - 1, 'd')
-                                                        .subtract(12 - j, 'h')
-                                                    }
+                                                .add(i - 1, 'd')
+                                                .subtract(12 - j, 'h')
+                                            }
                                         />
                                     )
                                 }
 
                                 {
                                     (i === 0 || i === 8) ? null :
-                                    calendarEvents.map(event => {
-                                        const cellDate = moment(currentDates.start)
-                                                            .add(i - 1, 'd')
-                                                            .subtract(12, 'h');
-                                        if (event.dateStartMoment.get('date') === (cellDate.get('date')) &&
-                                            event.dateEndMoment.get('date') === (cellDate.get('date'))) {
-                                            console.log("real")
-                                            console.log(event.dateStartMoment.format('dddd, MMMM Do YYYY HH:mm'))
-                                            console.log(event.dateEndMoment.format('dddd, MMMM Do YYYY HH:mm'))
-                                            console.log(cellDate.format('dddd, MMMM Do YYYY HH:mm'))
-                                            console.log(event.dateEndMoment.diff(event.dateStartMoment, 'minutes'))
-                                            console.log(event.dateStartMoment.diff(cellDate, 'minutes'))
-                                            return <TouchableOpacity
-                                                style={{
-                                                    backgroundColor: 'orange',
-                                                    width: '100%',
-                                                    position: 'absolute',
-                                                    height: ((event.dateEndMoment.diff(event.dateStartMoment, 'minutes')) / 60) * 
+                                        calendarEvents.map(event => {
+                                            const cellDate = moment(currentDates.start)
+                                                .add(i - 1, 'd')
+                                                .subtract(12, 'h');
+                                            if (event.dateStartMoment.get('date') === (cellDate.get('date')) &&
+                                                event.dateEndMoment.get('date') === (cellDate.get('date'))) {
+                                                console.log("real")
+                                                console.log(event.dateStartMoment.format('dddd, MMMM Do YYYY HH:mm'))
+                                                console.log(event.dateEndMoment.format('dddd, MMMM Do YYYY HH:mm'))
+                                                console.log(cellDate.format('dddd, MMMM Do YYYY HH:mm'))
+                                                console.log(event.dateEndMoment.diff(event.dateStartMoment, 'minutes'))
+                                                console.log(event.dateStartMoment.diff(cellDate, 'minutes'))
+                                                return <TouchableOpacity
+                                                    style={{
+                                                        backgroundColor: 'orange',
+                                                        width: '100%',
+                                                        position: 'absolute',
+                                                        height: ((event.dateEndMoment.diff(event.dateStartMoment, 'minutes')) / 60) *
                                                             (dimensions.window.height / 15),
-                                                    top: ((event.dateStartMoment.diff(cellDate, 'minutes')) / 60) * 
+                                                        top: ((event.dateStartMoment.diff(cellDate, 'minutes')) / 60) *
                                                             (dimensions.window.height / 15),
-                                                    opacity: 1,
-                                                }}
-                                            >
-                                                <Text style={styles.eventText}>
-                                                    {event.name} @ {event.location}
-                                                </Text>
+                                                        opacity: 1,
+                                                    }}
+                                                >
+                                                    <Text style={styles.eventText}>
+                                                        {event.name} @ {event.location}
+                                                    </Text>
 
-                                            </TouchableOpacity>
-                                        }
-                                        
-                                    })
+                                                </TouchableOpacity>
+                                            }
+
+                                        })
                                 }
                             </View>
                         )
