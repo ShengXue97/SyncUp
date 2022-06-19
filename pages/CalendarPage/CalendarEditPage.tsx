@@ -36,11 +36,11 @@ export default function CalendarEditPage(props) {
     const dateStartMoment = route.params === undefined ? moment(new Date()) :
         route.params.status === 'add_blank' ? moment(new Date()) :
             route.params.status === 'add_selected' ? route.params.cellDate :
-                route.params.status === 'edit' ? route.params.dateStartMoment :
+                (route.params.status === 'edit' || route.params.status === 'duplicate') ? route.params.dateStartMoment :
                     moment(new Date());
 
     const dateEndMoment = route.params === undefined ? moment(new Date()) :
-        route.params.status === 'edit' ? route.params.dateEndMoment :
+        (route.params.status === 'edit' || route.params.status === 'duplicate') ? route.params.dateEndMoment :
             dateStartMoment;
 
     const [name, setname] = useState(defaultName);
@@ -242,11 +242,13 @@ export default function CalendarEditPage(props) {
                             for (let i = 0; i < calendarEvents.length; i++) {
                                 const event = calendarEvents[i];
                                 const range2 = extendedMoment.range(event.dateEndMoment, event.dateEndMoment);
-                                if (range1.overlaps(range2)) {
-                                    overlaps = true;
-                                    console.log("ok")
-                                    callToast("Error! Event not added. This event overlaps with an existing event!")
-                                    break;
+                                if (range1.overlaps(range2, { adjacent: true })) {
+                                    if (route.params.id === undefined || route.params.id !== event.id) {
+                                        overlaps = true;
+                                        console.log("ok")
+                                        callToast("Error! Event not added. This event overlaps with an existing event!")
+                                        break;
+                                    }
                                 }
                             }
 
@@ -254,9 +256,13 @@ export default function CalendarEditPage(props) {
 
                             if (!overlaps) {
                                 const newEvent = { id: newId, name, location, dateStartMoment, dateEndMoment };
-                                if (route.params !== undefined && route.params.id !== undefined) {
+                                if (route.params.status !== undefined && route.params.status === 'edit') {
                                     editEvent(route.params.id, newEvent);
-                                } else {
+                                }
+                                else if (route.params.status !== undefined && route.params.status === 'duplicate') {
+                                    addEvent(newEvent);
+                                }
+                                else {
                                     addEvent(newEvent);
                                 }
                                 changePageTitle('Calendar');

@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import CalendarEditPage from './CalendarEditPage';
 import CalendarOverviewPage from './CalendarOverviewPage';
+import CalendarViewPage from './CalendarViewPage';
 import { CalendarProvider } from './CalendarContext';
 import AppContext from '../AppContext';
 
@@ -34,6 +35,11 @@ export default function CalendarPage() {
                 <Stack.Screen
                     name="CalendarEditPage"
                     component={CalendarEditPage}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="CalendarViewPage"
+                    component={CalendarViewPage}
                     options={{ headerShown: false }}
                 />
             </Stack.Navigator>

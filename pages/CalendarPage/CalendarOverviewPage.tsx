@@ -59,6 +59,18 @@ export default function CalendarOverviewPage() {
         })
     }
 
+    const handleDuplicateEvent = () => {
+        changePageTitle('Edit Event');
+        navigation.navigate('CalendarEditPage', {
+            status: 'duplicate',
+            name: selectedEvent.name,
+            location: selectedEvent.location,
+            dateStartMoment: selectedEvent.dateStartMoment,
+            dateEndMoment: selectedEvent.dateEndMoment,
+            id: selectedEvent.id,
+        })
+    }
+
     useEffect(() => {
         console.log(calendarEvents);
         const subscription = Dimensions.addEventListener(
@@ -75,10 +87,18 @@ export default function CalendarOverviewPage() {
             <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
                 <Modal.Content maxWidth="400px">
                     <Modal.CloseButton />
-                    <Modal.Header>Contact Us</Modal.Header>
+                    <Modal.Header>Options</Modal.Header>
                     <Modal.Body>
                         <Button style={styles.button} onPress={() => {
                             setShowModal(false);
+                            navigation.navigate('CalendarViewPage',
+                                {
+                                    name: selectedEvent.name,
+                                    location: selectedEvent.location,
+                                    dateStartMoment: selectedEvent.dateStartMoment,
+                                    dateEndMoment: selectedEvent.dateEndMoment,
+                                    id: selectedEvent.id,
+                                })
                         }}>
                             View event
                         </Button>
@@ -96,18 +116,9 @@ export default function CalendarOverviewPage() {
                         </Button>
                         <Button style={styles.button} onPress={() => {
                             setShowModal(false);
+                            handleDuplicateEvent();
                         }}>
                             Duplicate
-                        </Button>
-                        <Button style={styles.button} onPress={() => {
-                            setShowModal(false);
-                        }}>
-                            Copy
-                        </Button>
-                        <Button style={styles.button} onPress={() => {
-                            setShowModal(false);
-                        }}>
-                            Cut
                         </Button>
                     </Modal.Body>
                 </Modal.Content>
