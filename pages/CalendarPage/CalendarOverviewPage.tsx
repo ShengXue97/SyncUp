@@ -48,7 +48,6 @@ export default function CalendarOverviewPage() {
     }
 
     const handleEditEvent = () => {
-        changePageTitle('Edit Event');
         navigation.navigate('CalendarEditPage', {
             status: 'edit',
             name: selectedEvent.name,
@@ -60,7 +59,6 @@ export default function CalendarOverviewPage() {
     }
 
     const handleDuplicateEvent = () => {
-        changePageTitle('Edit Event');
         navigation.navigate('CalendarEditPage', {
             status: 'duplicate',
             name: selectedEvent.name,
@@ -91,6 +89,7 @@ export default function CalendarOverviewPage() {
                     <Modal.Body>
                         <Button style={styles.button} onPress={() => {
                             setShowModal(false);
+                            changePageTitle("View Event");
                             navigation.navigate('CalendarViewPage',
                                 {
                                     name: selectedEvent.name,
@@ -104,6 +103,7 @@ export default function CalendarOverviewPage() {
                         </Button>
                         <Button style={styles.button} onPress={() => {
                             setShowModal(false);
+                            changePageTitle("Edit Event");
                             handleEditEvent();
                         }}>
                             Edit event
@@ -116,6 +116,7 @@ export default function CalendarOverviewPage() {
                         </Button>
                         <Button style={styles.button} onPress={() => {
                             setShowModal(false);
+                            changePageTitle("Duplicate Event");
                             handleDuplicateEvent();
                         }}>
                             Duplicate

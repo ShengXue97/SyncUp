@@ -203,76 +203,83 @@ export default function CalendarEditPage(props) {
                     </View>
                 </View>
 
-                <Icon
-                    name='save-outline'
-                    type='ionicon'
-                    size={25}
-                    onPress={() => {
-                        //check if dateStart is same as dateEnd
-                        if (dateStart.format('dddd, MMMM Do YYYY') !== dateEnd.format('dddd, MMMM Do YYYY')) {
-                            callToast("Error! Event not added. Start Date must be the same as End Date!")
-                        }
-                        else if (name === null || name === "") {
-                            callToast("Error! Event not added. Event name cannot be empty!")
-                        }
-                        else if (location === null || location === "") {
-                            callToast("Error! Event not added. Location cannot be empty!")
-                        }
-                        else if (timeEnd.isSameOrBefore(timeStart)) {
-                            callToast("Error! Event not added. Start time must be before End Time!")
-                        } else {
-                            const dateStartMoment = dateStart.set({
-                                hour: timeStart.get('hour'),
-                                minute: timeStart.get('minute'),
-                                second: 0,
-                                millisecond: 0,
-                            })
+                <View style={styles.buttonContainer}>
+                    <Button size="md" colorScheme="primary" style={styles.button}
+                        onPress={() => {
+                            //check if dateStart is same as dateEnd
+                            if (dateStart.format('dddd, MMMM Do YYYY') !== dateEnd.format('dddd, MMMM Do YYYY')) {
+                                callToast("Error! Event not added. Start Date must be the same as End Date!")
+                            }
+                            else if (name === null || name === "") {
+                                callToast("Error! Event not added. Event name cannot be empty!")
+                            }
+                            else if (location === null || location === "") {
+                                callToast("Error! Event not added. Location cannot be empty!")
+                            }
+                            else if (timeEnd.isSameOrBefore(timeStart)) {
+                                callToast("Error! Event not added. Start time must be before End Time!")
+                            } else {
+                                const dateStartMoment = dateStart.set({
+                                    hour: timeStart.get('hour'),
+                                    minute: timeStart.get('minute'),
+                                    second: 0,
+                                    millisecond: 0,
+                                })
 
-                            const dateEndMoment = dateEnd.set({
-                                hour: timeEnd.get('hour'),
-                                minute: timeEnd.get('minute'),
-                                second: 0,
-                                millisecond: 0,
-                            })
+                                const dateEndMoment = dateEnd.set({
+                                    hour: timeEnd.get('hour'),
+                                    minute: timeEnd.get('minute'),
+                                    second: 0,
+                                    millisecond: 0,
+                                })
 
 
-                            //Check if the new event overlaps with an existing event
-                            var overlaps = false;
-                            const range1 = extendedMoment.range(dateStartMoment, dateEndMoment);
-                            for (let i = 0; i < calendarEvents.length; i++) {
-                                const event = calendarEvents[i];
-                                const range2 = extendedMoment.range(event.dateEndMoment, event.dateEndMoment);
-                                if (range1.overlaps(range2, { adjacent: true })) {
-                                    if (route.params.id === undefined || route.params.id !== event.id) {
-                                        overlaps = true;
-                                        console.log("ok")
-                                        callToast("Error! Event not added. This event overlaps with an existing event!")
-                                        break;
+                                //Check if the new event overlaps with an existing event
+                                var overlaps = false;
+                                const range1 = extendedMoment.range(dateStartMoment, dateEndMoment);
+                                for (let i = 0; i < calendarEvents.length; i++) {
+                                    const event = calendarEvents[i];
+                                    const range2 = extendedMoment.range(event.dateEndMoment, event.dateEndMoment);
+                                    if (range1.overlaps(range2, { adjacent: true })) {
+                                        if (route.params.id === undefined || route.params.id !== event.id) {
+                                            overlaps = true;
+                                            console.log("ok")
+                                            callToast("Error! Event not added. This event overlaps with an existing event!")
+                                            break;
+                                        }
                                     }
                                 }
+
+                                var newId = uniqid();
+
+                                if (!overlaps) {
+                                    const newEvent = { id: newId, name, location, dateStartMoment, dateEndMoment };
+                                    if (route.params.status !== undefined && route.params.status === 'edit') {
+                                        editEvent(route.params.id, newEvent);
+                                    }
+                                    else if (route.params.status !== undefined && route.params.status === 'duplicate') {
+                                        addEvent(newEvent);
+                                    }
+                                    else {
+                                        addEvent(newEvent);
+                                    }
+                                    changePageTitle('Calendar');
+                                    props.navigation.navigate('CalendarOverviewPage')
+                                }
                             }
 
-                            var newId = uniqid();
 
-                            if (!overlaps) {
-                                const newEvent = { id: newId, name, location, dateStartMoment, dateEndMoment };
-                                if (route.params.status !== undefined && route.params.status === 'edit') {
-                                    editEvent(route.params.id, newEvent);
-                                }
-                                else if (route.params.status !== undefined && route.params.status === 'duplicate') {
-                                    addEvent(newEvent);
-                                }
-                                else {
-                                    addEvent(newEvent);
-                                }
-                                changePageTitle('Calendar');
-                                props.navigation.navigate('CalendarOverviewPage')
-                            }
-                        }
+                        }}>
+                        Save event
+                    </Button>
 
-
-                    }}
-                />
+                    <Button size="sm" colorScheme="secondary" style={styles.button} onPress={() => {
+                        changePageTitle('Calendar');
+                        props.navigation.navigate('CalendarOverviewPage');
+                    }}>
+                        Cancel
+                    </Button>
+                </View>
 
             </View>
         </ScrollView >
@@ -302,7 +309,16 @@ const styles = StyleSheet.create({
         justifyContent: 'center', /* align horizontal */
         alignItems: 'center', /* align vertical */
     },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        marginHorizontal: '3%',
+        marginVertical: 20,
+    },
     toastText: {
         color: 'white',
+    },
+    button: {
+        width: 100,
     }
 });

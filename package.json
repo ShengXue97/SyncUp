@@ -7,7 +7,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "p": "expo publish"
   },
   "dependencies": {
     "@expo-google-fonts/inter": "^0.2.2",
@@ -17,7 +18,6 @@
     "@react-navigation/stack": "^6.2.1",
     "@rneui/base": "^4.0.0-rc.4",
     "@rneui/themed": "^4.0.0-rc.4",
-    "expo": "~45.0.0",
     "expo-app-loading": "^2.0.0",
     "expo-dev-client": "~1.0.0",
     "expo-status-bar": "~1.3.0",
