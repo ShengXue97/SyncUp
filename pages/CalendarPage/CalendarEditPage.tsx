@@ -22,16 +22,16 @@ export default function CalendarEditPage(props) {
     const [showDatePickerEnd, setShowDatePickerEnd] = useState(false);
     const [showTimePickerEnd, setShowTimePickerEnd] = useState(false);
 
-    const [name, setname] = useState(null);
-    const [location, setLocation] = useState(null);
-
     const [show, setShow] = React.useState(true);
 
-    const { calendarEvents, addEvent } = useContext(CalendarContext)
+    const { calendarEvents, addEvent, removeEvent, editEvent } = useContext(CalendarContext)
     const { pageTitle, changePageTitle } = useContext(AppContext)
 
     const route = useRoute();
     const toast = useToast();
+
+    const defaultName = route.params.name || "";
+    const defaultLocation = route.params.location || "";
 
     const dateStartMoment = route.params === undefined ? moment(new Date()) :
         route.params.status === 'add_blank' ? moment(new Date()) :
@@ -42,6 +42,9 @@ export default function CalendarEditPage(props) {
     const dateEndMoment = route.params === undefined ? moment(new Date()) :
         route.params.status === 'edit' ? route.params.dateEndMoment :
             dateStartMoment;
+
+    const [name, setname] = useState(defaultName);
+    const [location, setLocation] = useState(defaultLocation);
 
     const [dateStart, setDateStart] = useState(dateStartMoment.clone());
     const [timeStart, setTimeStart] = useState(dateStartMoment.clone());
@@ -92,12 +95,14 @@ export default function CalendarEditPage(props) {
                     placeholder="Event name"
                     leftIcon={{ type: 'ionicon', name: 'calendar-outline' }}
                     onChangeText={value => setname(value)}
+                    defaultValue={defaultName}
                 />
 
                 <Input
                     placeholder="Location"
                     leftIcon={{ type: 'ionicon', name: 'location-outline' }}
                     onChangeText={value => setLocation(value)}
+                    defaultValue={location}
                 />
 
                 <DateTimePickerModal
@@ -233,9 +238,9 @@ export default function CalendarEditPage(props) {
 
                             //Check if the new event overlaps with an existing event
                             var overlaps = false;
+                            const range1 = extendedMoment.range(dateStartMoment, dateEndMoment);
                             for (let i = 0; i < calendarEvents.length; i++) {
                                 const event = calendarEvents[i];
-                                const range1 = extendedMoment.range(dateStartMoment, dateEndMoment);
                                 const range2 = extendedMoment.range(event.dateEndMoment, event.dateEndMoment);
                                 if (range1.overlaps(range2)) {
                                     overlaps = true;
@@ -245,9 +250,16 @@ export default function CalendarEditPage(props) {
                                 }
                             }
 
+                            var newId = uniqid();
+
                             if (!overlaps) {
+                                const newEvent = { id: newId, name, location, dateStartMoment, dateEndMoment };
+                                if (route.params !== undefined && route.params.id !== undefined) {
+                                    editEvent(route.params.id, newEvent);
+                                } else {
+                                    addEvent(newEvent);
+                                }
                                 changePageTitle('Calendar');
-                                addEvent({ id: uniqid(), name, location, dateStartMoment, dateEndMoment })
                                 props.navigation.navigate('CalendarOverviewPage')
                             }
                         }

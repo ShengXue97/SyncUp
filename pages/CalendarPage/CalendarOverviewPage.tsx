@@ -27,7 +27,7 @@ export default function CalendarOverviewPage() {
     const [selectedEvent, setSelectedEvent] = useState(null);
 
     const ref = useRef(null);
-    const { calendarEvents, addEvent, removeEvent } = useContext(CalendarContext)
+    const { calendarEvents, addEvent, removeEvent, editEvent } = useContext(CalendarContext)
     const { pageTitle, changePageTitle } = useContext(AppContext)
 
     const onWeekChanged = (start, end) => {
@@ -51,6 +51,8 @@ export default function CalendarOverviewPage() {
         changePageTitle('Edit Event');
         navigation.navigate('CalendarEditPage', {
             status: 'edit',
+            name: selectedEvent.name,
+            location: selectedEvent.location,
             dateStartMoment: selectedEvent.dateStartMoment,
             dateEndMoment: selectedEvent.dateEndMoment,
             id: selectedEvent.id,

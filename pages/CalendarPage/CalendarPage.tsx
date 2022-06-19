@@ -14,12 +14,17 @@ export default function CalendarPage() {
         setCalendarEvents([...calendarEvents, event]);
     }
     const removeEvent = (id) => {
-        console.log("Deleting event: " + id);
         setCalendarEvents(calendarEvents.filter(e => e.id !== id));
     }
 
+    const editEvent = (id, newEvent) => {
+        const newEvents = calendarEvents.filter(e => e.id !== id);
+        newEvents.push(newEvent);
+        setCalendarEvents(newEvents);
+    }
+
     return (
-        <CalendarProvider value={{ calendarEvents, addEvent, removeEvent }}>
+        <CalendarProvider value={{ calendarEvents, addEvent, removeEvent, editEvent }}>
             <Stack.Navigator>
                 <Stack.Screen
                     name="CalendarOverviewPage"

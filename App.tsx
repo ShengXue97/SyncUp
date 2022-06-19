@@ -120,7 +120,7 @@ export default class App extends React.Component {
                     headerTitleStyle: {
                       fontWeight: 'bold',
                     },
-                    headerTitle: this.state.pageTitle,
+                    headerTitle: "Profile",
                   }}
                 />
               </Tab.Navigator>
